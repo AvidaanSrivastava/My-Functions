@@ -1,4 +1,4 @@
-# My-Functions
+# common_functions
 
 Repository containing a python script which contains all useful python functions I've created. The following functions are in the script (more to be added as needed):
 

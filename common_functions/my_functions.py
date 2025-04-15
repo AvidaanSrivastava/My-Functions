@@ -3,6 +3,7 @@
 
 
 import numpy as np
+from astropy.io import fits
 
 def p_to_a(period, M_star):
 
@@ -227,5 +228,14 @@ def sin_func(t, K, phi):
     """
 
     return K * np.sin(t + phi)
+
+def print_fits_header_names(file):
+    """
+    Function to get the header of a FITS file.
+    """
+    with fits.open(file) as hdul:
+        for i in range(len(hdul)):
+            print(i, hdul[i].name)
+
 
 

@@ -232,10 +232,38 @@ def sin_func(t, K, phi):
 def print_fits_header_names(file):
     """
     Function to get the header of a FITS file.
+    :file: Full path of the file on the local machine
     """
     with fits.open(file) as hdul:
         for i in range(len(hdul)):
             print(i, hdul[i].name)
+
+
+def derivative(y_col, x_col):
+
+    """
+    Function to calculate the derivative of a spectrum using the central difference method.
+    :param y_col: The y values of the spectrum.
+    :param x_col: The x values of the spectrum.
+    :return: The derivative of the spectrum.
+    """
+
+    y_col = np.array(y_col).tolist()
+    x_col = np.array(x_col).tolist()
+
+    no_pixels = len(y_col)
+    idx_list = list(map(int, np.linspace(1, no_pixels - 2, no_pixels - 2).tolist()))
+
+    dy_dx_list = []
+    for i in idx_list:
+
+        pixel = i
+
+        dy_dx = (y_col[pixel + 1] - y_col[pixel - 1]) / (x_col[pixel + 1] - x_col[pixel - 1])
+
+        dy_dx_list.append(dy_dx)
+
+    return dy_dx_list
 
 
 

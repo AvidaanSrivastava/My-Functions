@@ -266,4 +266,26 @@ def derivative(y_col, x_col):
     return dy_dx_list
 
 
+def maroon_x_etc_sigRV(snr_peak, Teff):
+
+    """
+    Calculate the sigRV for a MAROON-X spectrum of M dwarfs with a given peak SNR and effective temperature.
+    
+    Parameters:
+    snr_peak (float): The peak SNR of the spectrum.
+    Teff (float): The effective temperature of the star.
+    
+    Returns:
+    float: The calculated sigRV.
+    """
+
+    if Teff < 3500:
+        sig_rv = 180 / (snr_peak ** 1.15) + 0.06
+    
+    elif Teff < 4000 and Teff >= 3500:
+        sig_rv = 414 / (snr_peak ** 1.14) + 0.01
+
+    
+    return sig_rv
+
 

@@ -15,13 +15,14 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from matplotlib.gridspec import GridSpec
 import matplotlib.gridspec as gridspec  # alias if needed
+import seaborn as sns
 
 # ========================
 # Data & numerical packages
 # ========================
 import numpy as np
 import pandas as pd
-from numpy import *  # Not recommended, but included if you rely on it
+#from numpy import *  # Not recommended, but included if you rely on it
 import pylab
 import random
 import time

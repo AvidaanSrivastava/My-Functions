@@ -1,6 +1,6 @@
 # common_functions
 
-Install using: pip install --upgrade --force-reinstall git+https://github.com/yourusername/common_functions.git
+Install using: pip install --upgrade --force-reinstall git+https://github.com/AvidaanSrivastava/My-Functions.git
 
 Repository containing a python script which contains all useful python functions I've created. The following functions are in the script (more to be added as needed):
 

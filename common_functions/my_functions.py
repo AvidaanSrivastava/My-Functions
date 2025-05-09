@@ -289,3 +289,90 @@ def maroon_x_etc_sigRV(snr_peak, Teff):
     return sig_rv
 
 
+def plot_rv_phase_fold(time, rv, rv_error, period, tc, rv_fit, bin = False, nbins = 13):
+
+    """
+    Function to plot the phase folded RV data and the best fit model.
+
+    Parameters
+    ----------
+    time : array
+        Time in days.
+    rv : array
+        Radial velocity measurements.
+    rv_error : array
+        Radial velocity errors.
+    period : float
+        Orbital period of the planet in days.  
+    tc : float
+        Time of conjunction.
+    rv_fit : float
+        Best fit radial velocity model from juliet.
+    bin : bool
+        If True, bin the data.
+    nbins : int
+        Number of bins to use for the phase folded plot.
+    """
+
+    ## Get phases
+    phases = juliet.utils.get_phases(time, period, tc)
+    idx = np.argsort(phases)
+
+    model_times = np.linspace(np.min(time) - 30, np.max(time) + 30, len(rv_fit))
+
+    phases_kep = juliet.utils.get_phases(model_times, period, tc)
+    idx_kep = np.argsort(phases_kep)
+
+    ## Bin the RV data
+
+    bins = np.linspace(-0.5, 0.5,nbins)
+    increments = np.diff(bins)
+    binned_rv = []
+    binned_erv = []
+
+    for i in range(len(bins)-1):
+
+        bin_i = bins[i]
+        this_bin_rv = []
+        this_bin_erv = []
+
+        for j in range(len(phases[idx])):
+
+            phase_j = phases[idx][j]
+            vel_j = rv[idx][j]
+            evel_j = rv_error[idx][j]
+
+            if (phase_j >= bin_i) & (phase_j < bins[i+1]):
+                this_bin_rv.append(vel_j)
+                this_bin_erv.append(evel_j ** 2)
+
+        median_rv = np.median(this_bin_rv)
+        std_rv = np.sqrt(np.sum(this_bin_erv)) / len(this_bin_erv)
+
+        binned_rv.append(median_rv)
+        binned_erv.append(std_rv)
+
+    binned_rv = np.array(binned_rv)
+    binned_erv = np.array(binned_erv)
+
+    print(len(binned_rv))
+    print(len(binned_erv))
+    print(len(bins[:-1]))
+    ## Get the best fit model
+
+    ## Plot the phase folded data
+    fig, ax = plt.subplots(figsize=(5, 5))
+    ax.errorbar(phases[idx], rv[idx], yerr=rv_error[idx], fmt='o', label='RV data', color='blue', markersize=2)
+
+    if bin == True:
+        ax.errorbar(bins[:-1] + increments / 2, binned_rv, yerr=binned_erv, fmt='o', label='Binned RV data', color='red', markersize=2)
+    ax.plot(phases_kep[idx_kep], rv_fit[idx_kep], label='Best fit model', color='black')
+    ax.set_xlabel('Phase')
+    ax.set_ylabel('Radial Velocity (m/s)')
+    ax.set_title('Phase Folded Radial Velocity')
+    ax.legend()
+    ax.grid()
+    plt.show()
+
+
+

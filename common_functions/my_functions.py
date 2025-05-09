@@ -360,18 +360,22 @@ def plot_rv_phase_fold(time, rv, rv_error, period, tc, rv_fit, bin = False, nbin
     print(len(bins[:-1]))
     ## Get the best fit model
 
+    offset = rv_fit[idx_kep][0]
+    print('Offset:', offset)
+
     ## Plot the phase folded data
     fig, ax = plt.subplots(figsize=(5, 5))
-    ax.errorbar(phases[idx], rv[idx], yerr=rv_error[idx], fmt='o', label='RV data', color='blue', markersize=2)
+    ax.errorbar(phases[idx], rv[idx] - offset, yerr=rv_error[idx], fmt='o', label='RV data', color='blue', markersize=2)
 
     if bin == True:
-        ax.errorbar(bins[:-1] + increments / 2, binned_rv, yerr=binned_erv, fmt='o', label='Binned RV data', color='red', markersize=2)
-    ax.plot(phases_kep[idx_kep], rv_fit[idx_kep], label='Best fit model', color='black')
+        ax.errorbar(bins[:-1] + increments / 2, binned_rv - offset, yerr=binned_erv, fmt='o', label='Binned RV data', color='red', markersize=2)
+    ax.plot(phases_kep[idx_kep], rv_fit[idx_kep] - offset, label='Best fit model', color='black')
     ax.set_xlabel('Phase')
     ax.set_ylabel('Radial Velocity (m/s)')
-    #ax.set_title('Phase Folded Radial Velocity')
+    ax.set_title('Phase Folded Radial Velocity')
     ax.legend()
     ax.grid()
+    ax.set_xlim(-0.5, 0.5)
     plt.show()
 
 

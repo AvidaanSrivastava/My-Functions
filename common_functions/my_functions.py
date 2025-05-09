@@ -369,7 +369,7 @@ def plot_rv_phase_fold(time, rv, rv_error, period, tc, rv_fit, bin = False, nbin
     ax.plot(phases_kep[idx_kep], rv_fit[idx_kep], label='Best fit model', color='black')
     ax.set_xlabel('Phase')
     ax.set_ylabel('Radial Velocity (m/s)')
-    ax.set_title('Phase Folded Radial Velocity')
+    #ax.set_title('Phase Folded Radial Velocity')
     ax.legend()
     ax.grid()
     plt.show()

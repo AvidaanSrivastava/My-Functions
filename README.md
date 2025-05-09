@@ -15,3 +15,4 @@ Repository containing a python script which contains all useful python functions
 9. etc_noise: Get number of measurements needed to obtain the RV precision gievn accuracey per point (svrad), expected semi-aplitude (kexp), detection significance threshold (sig_thresh) and white noise (noise). The default noise level is 0.5-m/s and can be changed
 10. rms: Get the root mean square of an array (arr)
 11. sin_func: Get a sine wave given an array of timestamps (t), and constant amplitude (K) and phase (phi)
+12. plot_rv_phase_fold: Get a RV phasefolded plot compatible with juliet results

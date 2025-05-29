@@ -379,4 +379,22 @@ def plot_rv_phase_fold(time, rv, rv_error, period, tc, rv_fit, bin = False, nbin
     plt.show()
 
 
+def R_planet_error(delta, d_delta, r_star, d_r_star, r_planet):
+    """
+    Calculate the error in the planet radius based on the error in the transit depth and stellar radius.
+    
+    Parameters:
+    delta (float): Transit depth
+    d_delta (float): Error in transit depth
+    r_star (float): Stellar radius
+    d_r_star (float): Error in stellar radius
+    r_planet (float): Calculated planet radius
+    
+    Returns:
+    float: Error in planet radius
+    """
+    R_earth = 6378.1 * 10**3 # m
+    r_planet = r_planet
+    sigma_rp = np.sqrt((d_r_star / r_star)**2 + (0.5 * d_delta / delta)**2) * r_planet
 
+    return sigma_rp # Return in R_earth

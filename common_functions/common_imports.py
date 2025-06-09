@@ -69,6 +69,7 @@ import george
 from george import kernels
 from george.gp import LinAlgError
 from PyAstronomy.pyasl import foldAt
+import superearth as se
 
 # ========================
 # Progress bar

@@ -398,3 +398,39 @@ def R_planet_error(delta, d_delta, r_star, d_r_star, r_planet):
     sigma_rp = np.sqrt((d_r_star / r_star)**2 + (0.5 * d_delta / delta)**2) * r_planet
 
     return sigma_rp # Return in R_earth
+    
+
+def mass_calc(K, Kerr, P, Perr, Mstar, Mstarerr):
+    """
+    Calculate the minimum mass (Msini) of a planet from RV semi-amplitude and its uncertainty.
+
+    Parameters
+    ----------
+    K : float
+        Radial velocity semi-amplitude (m/s).
+    Kerr : float
+        Uncertainty in the RV semi-amplitude (m/s).
+    P : float
+        Orbital period of the planet (days).
+    Perr : float
+        Uncertainty in the orbital period (days).
+    Mstar : float
+        Mass of the host star (in solar masses).
+    Mstarerr : float
+        Uncertainty in the stellar mass (in solar masses).
+
+    Returns
+    -------
+    Mp : float
+        Minimum mass of the planet (Earth masses).
+    Mperr : float
+        Uncertainty in the minimum mass (Earth masses).
+    """
+
+    # Calculate minimum mass (Msini) using radvel's Msini function (returns in Earth masses)
+    Mp = radvel.utils.Msini(K=K, P=P, Mstar=Mstar, e=0)
+
+    # Propagate uncertainties using partial derivatives (quadrature sum)
+    Mperr = Mp * np.sqrt((Kerr / K)**2 + (2/3 * Mstarerr / Mstar)**2 + (1/3 * Perr / P)**2)
+
+    return Mp, Mperr 

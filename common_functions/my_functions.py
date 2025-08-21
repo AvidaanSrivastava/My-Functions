@@ -473,3 +473,85 @@ def mass_calc(K, Kerr, P, Perr, Mstar, Mstarerr):
     Mperr = Mp * np.sqrt((Kerr / K)**2 + (2/3 * Mstarerr / Mstar)**2 + (1/3 * Perr / P)**2)
 
     return Mp, Mperr 
+
+
+def sample_split_normal(mean, err_low, err_high, nsamples=100000):
+    """
+    Draw samples from an asymmetric (split) normal distribution.
+    
+    Parameters
+    ----------
+    mean : float
+        Central value.
+    err_low : float
+        Lower 1-sigma error (positive number).
+    err_high : float
+        Upper 1-sigma error (positive number).
+    nsamples : int
+        Number of samples to draw.
+    
+    Returns
+    -------
+    samples : ndarray
+        Array of samples.
+    """
+    # Split samples half/half
+    n_low = nsamples // 2
+    n_high = nsamples - n_low
+    
+    low_samples = np.random.normal(mean, err_low, n_low)
+    high_samples = np.random.normal(mean, err_high, n_high)
+    
+    return np.concatenate([low_samples, high_samples])
+
+
+def inclination_from_transit(b, b_err_low, b_err_high,
+                                  aRs, aRs_err_low, aRs_err_high,
+                                  nsamples=100000):
+    """
+    Compute orbital inclination (deg) with asymmetric uncertainties
+    from impact parameter (b) and scaled semi-major axis (a/R*).
+    
+    Parameters
+    ----------
+    b : float
+        Impact parameter.
+    b_err_low, b_err_high : float
+        Lower and upper 1-sigma uncertainties on b.
+    aRs : float
+        Scaled semi-major axis a/R*.
+    aRs_err_low, aRs_err_high : float
+        Lower and upper 1-sigma uncertainties on a/R*.
+    nsamples : int
+        Number of Monte Carlo samples.
+    
+    Returns
+    -------
+    inc_median : float
+        Median inclination in degrees.
+    inc_err_low : float
+        Lower bound (16th percentile distance from median).
+    inc_err_high : float
+        Upper bound (84th percentile distance from median).
+    """
+    # Draw split-normal samples
+    b_samples = sample_split_normal(b, b_err_low, b_err_high, nsamples)
+    aRs_samples = sample_split_normal(aRs, aRs_err_low, aRs_err_high, nsamples)
+
+    # Compute cos(i) = b / (a/R*)
+    cosi = b_samples / aRs_samples
+    cosi = np.clip(cosi, 0, 1)  # enforce physical bounds
+
+    # Inclination samples
+    inc_samples = np.degrees(np.arccos(cosi))
+
+    # Credible interval
+    inc_median = np.median(inc_samples)
+    inc_lower = np.percentile(inc_samples, 16)
+    inc_upper = np.percentile(inc_samples, 84)
+
+    inc_err_low = inc_median - inc_lower
+    inc_err_high = inc_upper - inc_median
+
+    return inc_median, inc_err_low, inc_err_high
+

@@ -67,7 +67,7 @@ def calc_Teq(T_star, a, R_star, T_star_err=None, a_err=None, R_star_err=None, A=
     Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4)
     Teq = T_star * (1 - A)**(1/4) * (x)**(1/2)
 
-    if T_star_err is None & R_star_err is None & a_err is None:
+    if T_star_err is None and R_star_err is None and a_err is None:
        return Teq, Tday
     
     else:
@@ -122,7 +122,7 @@ def calc_insolation(T_star, R_star, a, T_star_err=None, R_star_err=None, a_err=N
     a = a 
     T_sun = 5778
 
-    if T_star_err is None & R_star_err is None & a_err is None:
+    if T_star_err is None and R_star_err is None and a_err is None:
         # If no errors are provided, use the nominal values
         T_star = T_star
         R_star = R_star

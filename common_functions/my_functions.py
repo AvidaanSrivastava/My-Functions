@@ -46,20 +46,6 @@ def p_to_a(period, M_star, period_err=None, M_star_err=None):
         return a, a_AU, a_err, a_AU_err
     else:
         return a, a_AU
-    
-
-semi_maj_axis, semi_maj_axis_AU, semi_maj_axis_err, semi_maj_axis_AU_err = p_to_a(period_fit, mstar, eperiod_fit, mstar_err)
-
-print('Semi-major axis:', np.round(semi_maj_axis_AU, 5), 'AU')
-print('Semi-major axis error:', np.round(semi_maj_axis_AU_err, 5), 'AU')
-
-print('Semi-major axis:', np.round(semi_maj_axis, 5), 'm')
-print('Semi-major axis error:', np.round(semi_maj_axis_err, 5), 'm')
-
-a_R_star = semi_maj_axis / R_star
-a_R_star_err = np.sqrt((semi_maj_axis_err/semi_maj_axis) ** 2 + (err_R_star/R_star) ** 2) * a_R_star
-
-print('Semi-major axis in R_star:', np.round(a_R_star, 5), '+/-', np.round(a_R_star_err, 5))
 
 
 def calc_Teq(T_star, a, R_star, T_star_err=None, a_err=None, R_star_err=None, A=0, q=2/3):

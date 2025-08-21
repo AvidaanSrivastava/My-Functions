@@ -62,7 +62,7 @@ a_R_star_err = np.sqrt((semi_maj_axis_err/semi_maj_axis) ** 2 + (err_R_star/R_st
 print('Semi-major axis in R_star:', np.round(a_R_star, 5), '+/-', np.round(a_R_star_err, 5))
 
 
-def calc_Teq(T_star, a, A, R_star, q=2/3):
+def calc_Teq(T_star, a, R_star, T_star_err=None, a_err=None, R_star_err=None, A=0, q=2/3):
 
     """ This function calculates the equilibrium temperature of a planet given its distance from the star,
     the star's temperature, the planet's albedo, and the star's radius.
@@ -81,7 +81,25 @@ def calc_Teq(T_star, a, A, R_star, q=2/3):
     Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4)
     Teq = T_star * (1 - A)**(1/4) * (x)**(1/2)
 
-    return Teq, Tday
+    if T_star_err is None & R_star_err is None & a_err is None:
+       return Teq, Tday
+    
+    else:
+        T_star = T_star
+        R_star = R_star
+        a = a
+
+        Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4)
+        Teq = T_star * (1 - A)**(1/4) * (x)**(1/2)
+
+        # Calculate the error in the equilibrium temperature
+        dTeq_T = 0.25 * Teq * (T_star_err / T_star)
+        dTeq_R = 0.5 * Teq * (R_star_err / R_star)
+        dTeq_a = -0.5 * Teq * (a_err / a)
+
+        Teq_err = np.sqrt(dTeq_T**2 + dTeq_R**2 + dTeq_a**2)
+
+        return Teq, Tday, Teq_err
 
 
 def calc_vesc(M_planet, R_planet):
@@ -105,7 +123,7 @@ def calc_vesc(M_planet, R_planet):
     return vesc
 
 
-def calc_insolation(T_star, T_star_err=None, R_star, R_star_err = None, a, a_err = None):
+def calc_insolation(T_star, R_star, a, T_star_err=None, R_star_err=None, a_err=None):
 
     """ This function calculates the insolation of a planet given its distance from the star,
     the star's temperature, and the star's radius.
@@ -142,6 +160,7 @@ def calc_insolation(T_star, T_star_err=None, R_star, R_star_err = None, a, a_err
         S_err = np.sqrt(dS_T**2 + dS_R**2 + dS_a**2)
 
         return S, S_err
+
 
 
 def planck_func(wave, T):

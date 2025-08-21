@@ -105,7 +105,7 @@ def calc_vesc(M_planet, R_planet):
     return vesc
 
 
-def calc_insolation(T_star, R_star, a):
+def calc_insolation(T_star, T_star_err=None, R_star, R_star_err = None, a, a_err = None):
 
     """ This function calculates the insolation of a planet given its distance from the star,
     the star's temperature, and the star's radius.
@@ -118,9 +118,30 @@ def calc_insolation(T_star, R_star, a):
     a = a 
     T_sun = 5778
 
-    S = (R_star)**2 * (T_star/T_sun)**4 / a**2
+    if T_star_err is None & R_star_err is None & a_err is None:
+        # If no errors are provided, use the nominal values
+        T_star = T_star
+        R_star = R_star
 
-    return S
+        S = (R_star)**2 * (T_star/T_sun)**4 / a**2
+        return S
+    
+    else:
+        # If errors are provided, calculate the insolation with errors
+        T_star = T_star
+        R_star = R_star
+        a = a
+
+        S = (R_star)**2 * (T_star/T_sun)**4 / a**2
+
+        # Calculate the error in the insolation
+        dS_T = 4 * S * (T_star_err / T_star)
+        dS_R = 2 * S * (R_star_err / R_star)
+        dS_a = -2 * S * (a_err / a)
+
+        S_err = np.sqrt(dS_T**2 + dS_R**2 + dS_a**2)
+
+        return S, S_err
 
 
 def planck_func(wave, T):

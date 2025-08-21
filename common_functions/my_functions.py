@@ -5,22 +5,61 @@
 import numpy as np
 from astropy.io import fits
 
-def p_to_a(period, M_star):
-
-    """ This function calculates the semi-major axis of a planet given its period and the mass of the star.
-    The formula used is Kepler's third law of planetary motion.
-    period: period of the planet in days
-    M_star: mass of the star in solar masses
-    a: semi-major axis in meters
-    a_AU: semi-major axis in AU
+def p_to_a(period, M_star, period_err=None, M_star_err=None):
     """
+    Calculate the semi-major axis of a planet given its period and the mass of the star,
+    and optionally propagate uncertainties.
 
-    period = period * 86400   ## From days to seconds
+    Parameters
+    ----------
+    period : float
+        Period of the planet in days.
+    M_star : float
+        Mass of the star in solar masses.
+    period_err : float, optional
+        Uncertainty in the period (days).
+    M_star_err : float, optional
+        Uncertainty in the stellar mass (solar masses).
+
+    Returns
+    -------
+    a : float
+        Semi-major axis in meters.
+    a_AU : float
+        Semi-major axis in AU.
+    a_err : float, optional
+        Uncertainty in semi-major axis in meters (if errors provided).
+    a_AU_err : float, optional
+        Uncertainty in semi-major axis in AU (if errors provided).
+    """
+    period_sec = period * 86400   # From days to seconds
     G = 6.67430e-11
-    M_star = M_star * 1.989e30   ## In Kg
-    a = (G * M_star * period**2 / (4*np.pi**2))**(1/3)     ## In meters
-    a_AU = a / 1.496e11   ## In AU
-    return a, a_AU
+    M_star_kg = M_star * 1.989e30   # In kg
+    a = (G * M_star_kg * period_sec**2 / (4 * np.pi**2))**(1/3)  # meters
+    a_AU = a / 1.496e11  # AU
+
+    if period_err is not None and M_star_err is not None:
+        # Propagate errors: da/a = (1/3)*dM/M + (2/3)*dP/P
+        rel_err = ((1/3)*(M_star_err/M_star))**2 + ((2/3)*(period_err/period))**2
+        a_err = a * np.sqrt(rel_err)
+        a_AU_err = a_AU * rel_err
+        return a, a_AU, a_err, a_AU_err
+    else:
+        return a, a_AU
+    
+
+semi_maj_axis, semi_maj_axis_AU, semi_maj_axis_err, semi_maj_axis_AU_err = p_to_a(period_fit, mstar, eperiod_fit, mstar_err)
+
+print('Semi-major axis:', np.round(semi_maj_axis_AU, 5), 'AU')
+print('Semi-major axis error:', np.round(semi_maj_axis_AU_err, 5), 'AU')
+
+print('Semi-major axis:', np.round(semi_maj_axis, 5), 'm')
+print('Semi-major axis error:', np.round(semi_maj_axis_err, 5), 'm')
+
+a_R_star = semi_maj_axis / R_star
+a_R_star_err = np.sqrt((semi_maj_axis_err/semi_maj_axis) ** 2 + (err_R_star/R_star) ** 2) * a_R_star
+
+print('Semi-major axis in R_star:', np.round(a_R_star, 5), '+/-', np.round(a_R_star_err, 5))
 
 
 def calc_Teq(T_star, a, A, R_star, q=2/3):

@@ -75,7 +75,7 @@ def calc_Teq(T_star, a, R_star, T_star_err=None, a_err=None, R_star_err=None, A=
         R_star = R_star
         a = a
 
-        Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4)
+        Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4) * 2 ** .5
         Teq = T_star * (1 - A)**(1/4) * (x)**(1/2)
 
         # Calculate the error in the equilibrium temperature

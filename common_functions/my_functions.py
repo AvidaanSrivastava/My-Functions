@@ -581,3 +581,34 @@ def inclination_from_transit(b, b_err_low, b_err_high,
 
     return inc_median, inc_err_low, inc_err_high
 
+
+def planet_density(Mp, Rp, Mp_err=None, Rp_err=None):
+
+    """ This function calculates the density of a planet given its mass and radius.
+    Mp: mass of the planet in Earth masses
+    Rp: radius of the planet in Earth radii
+    rho: density of the planet in g/cm^3
+    """
+
+    if Mp_err is None and Rp_err is None:
+        # If no errors are provided, use the nominal values
+        Mp = Mp
+        Rp = Rp
+
+        rho = (Mp) / (Rp**3) * 5.51  # Density in g/cm^3
+        return rho
+    
+    else:
+        # If errors are provided, calculate the density with errors
+        Mp = Mp
+        Rp = Rp
+
+        rho = (Mp) / (Rp**3) * 5.51  # Density in g/cm^3
+
+        # Calculate the error in the density
+        drho_M = rho * (Mp_err / Mp)
+        drho_R = -3 * rho * (Rp_err / Rp)
+
+        rho_err = np.sqrt(drho_M**2 + drho_R**2)
+
+        return rho, rho_err

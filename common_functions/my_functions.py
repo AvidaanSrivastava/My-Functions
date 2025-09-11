@@ -612,3 +612,32 @@ def planet_density(Mp, Rp, Mp_err=None, Rp_err=None):
         rho_err = np.sqrt(drho_M**2 + drho_R**2)
 
         return rho, rho_err
+
+
+
+def calc_K_semi_amplitude(period, mass_planet, mass_star, e=0, i=90):
+    """Calculate the expected RV semi-amplitude K in m/s.
+
+    Args:
+        period (float): Orbital period in days.
+        mass_planet (float): Planet mass in Earth masses.
+        mass_star (float, optional): Stellar mass in Solar masses.
+        e (float, optional): Orbital eccentricity. Defaults to 0.
+        i (float, optional): Orbital inclination in degrees. Defaults to 90.
+
+    Returns:
+        float: Expected RV semi-amplitude K in m/s.
+    """
+
+    M_earth = 5.972e24  # Mass of Earth in
+    M_p = mass_planet * M_earth  # Convert planet mass to kg
+
+    M_sun = 1.989e30  # Mass of Sun in kg
+    M_s = mass_star * M_sun  # Convert stellar mass to kg
+
+    P = period * 86400  # Convert period from days to seconds
+    G = 6.67430e-11  # Gravitational constant in m^3 kg^-1 s^-2
+
+    K = (2 * np.pi * G / P) ** (1 / 3) * M_p * np.sin(np.radians(i)) / (M_s + M_p) ** (2 / 3) / np.sqrt(1 - e ** 2)
+
+    return K

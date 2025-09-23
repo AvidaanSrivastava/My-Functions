@@ -61,6 +61,7 @@ import radvel.likelihood
 from radvel.plot import orbit_plots, mcmc_plots
 from dace_query.spectroscopy import Spectroscopy
 import lightkurve as lk
+from tess_sip import SIP
 import juliet
 import emcee
 import arviz as az

@@ -72,7 +72,7 @@ from PyAstronomy.pyasl import foldAt
 import superearth as se
 import exopie
 import spright 
-from spright import RMrelation
+from spright import RMRelation
 
 # ========================
 # Progress bar

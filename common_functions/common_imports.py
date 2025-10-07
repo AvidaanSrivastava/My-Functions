@@ -76,6 +76,13 @@ import spright
 from spright import RMRelation
 
 # ========================
+# PandEXO
+# ========================
+import warnings
+warnings.filterwarnings('ignore')
+import pandexo.engine.justdoit as jdi # THIS IS THE HOLY GRAIL OF PANDEXO
+
+# ========================
 # Progress bar
 # ========================
 from tqdm import tqdm

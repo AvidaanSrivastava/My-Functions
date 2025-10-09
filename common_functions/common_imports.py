@@ -75,6 +75,7 @@ import exopie
 import spright 
 from spright import RMRelation
 from ldtk import LDPSetCreator, BoxcarFilter
+from ldtk.filters import tess
 
 # ========================
 # PandEXO

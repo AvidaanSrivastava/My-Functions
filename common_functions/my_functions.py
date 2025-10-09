@@ -641,3 +641,51 @@ def calc_K_semi_amplitude(period, mass_planet, mass_star, e=0, i=90):
     K = (2 * np.pi * G / P) ** (1 / 3) * M_p * np.sin(np.radians(i)) / (M_s + M_p) ** (2 / 3) / np.sqrt(1 - e ** 2)
 
     return K
+
+
+def transit_duration(P_days, R_star_Rsun, R_planet_Rearth, M_star_Msun,
+                     impact_parameter=0.0, inclination_deg=90.0):
+    """
+    Calculate total transit duration (T14) for a planet assuming circular orbit.
+
+    Parameters
+    ----------
+    P_days : float
+        Orbital period in days.
+    R_star_Rsun : float
+        Stellar radius in solar radii.
+    R_planet_Rearth : float
+        Planetary radius in Earth radii.
+    M_star_Msun : float
+        Stellar mass in solar masses.
+    impact_parameter : float, optional
+        Transit impact parameter (0 = central transit).
+    inclination_deg : float, optional
+        Orbital inclination in degrees (90 = edge-on).
+
+    Returns
+    -------
+    T14_hours : float
+        Total transit duration in hours.
+    """
+    # Convert to SI units
+    P = P_days * day
+    R_star = R_star_Rsun * R_sun
+    R_planet = R_planet_Rearth * R_earth
+    M_star = M_star_Msun * M_sun
+
+    # Semi-major axis (Kepler's 3rd law)
+    a = (G * M_star * P**2 / (4 * np.pi**2))**(1/3)
+
+    # Convert inclination to radians
+    i = np.radians(inclination_deg)
+
+    # Compute argument for arcsin
+    term = (R_star / a) * np.sqrt((1 + R_planet / R_star)**2 - impact_parameter**2) / np.sin(i)
+    term = np.clip(term, -1, 1)  # ensure valid range
+
+    # Transit duration (seconds)
+    T14 = (P / np.pi) * np.arcsin(term)
+
+    # Convert to hours
+    return T14 / 3600.0

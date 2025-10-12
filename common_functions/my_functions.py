@@ -689,3 +689,21 @@ def transit_duration(P_days, R_star_Rsun, R_planet_Rearth, M_star_Msun,
 
     # Convert to hours
     return T14 / 3600.0
+
+
+def TSM(Rp, Teq, Mp, Rs, jmag):
+
+    '''
+    
+    Using Kempton et al. 2018 formula to calculate TSM
+    
+    Rp: Planet radius in Earth radii
+    Teq: Planet equilibrium temperature in Kelvin
+    Mp: Planet mass in Earth masses
+    Rs: Stellar radius in Solar radii
+    jmag: Stellar J magnitude
+    
+    '''
+
+    tsm = 0.19 * (Rp**3 * Teq) / (Mp * Rs**2) * 10**(-1/5*jmag) 
+    return tsm

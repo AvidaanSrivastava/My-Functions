@@ -707,3 +707,107 @@ def TSM(Rp, Teq, Mp, Rs, jmag):
 
     tsm = 0.19 * (Rp**3 * Teq) / (Mp * Rs**2) * 10**(-1/5*jmag) 
     return tsm
+
+
+## Getting HARPS 3.5 wavelength solution
+
+def build_HARPS_wavelengths(hdr, array_size = (72, 4096)):
+        """Compute the wavelength solution to this given spectra (EQ 4.1 of DRS manual)
+        Convert from air wavelenbgths to vacuum
+        """
+        # degree of the polynomial
+        d = hdr["HIERARCH ESO DRS CAL TH DEG LL"]
+        # number of orders
+        omax = hdr.get("HIERARCH ESO DRS CAL LOC NBO", array_size[0])
+        xmax = array_size[1]
+
+        # matrix X:
+        #
+        # axis 0: the entry corresponding to each coefficient
+        # axis 1: each pixel number
+
+        x = np.empty((d + 1, xmax), "int64")
+        x[0].fill(1)  # x[0,*] = x^0 = 1,1,1,1,1,...
+        x[1] = np.arange(xmax)
+
+        for i in range(1, d):
+            x[i + 1] = x[i] * x[1]
+
+        # matrix A:
+        #
+        # axis 0: the different orders
+        # axis 1: all coefficients for the given order
+
+        A = np.reshape(
+            [hdr["HIERARCH ESO DRS CAL TH COEFF LL" + str(i)] for i in range(omax * (d + 1))],
+            (omax, d + 1),
+        )  # slow 30 ms
+
+        # the wavelengths for each order are a simple dot product between the coefficients and pixel-wise data (X)
+        wavelengths = np.dot(A, x)
+
+        vacuum_wavelengths = airtovac(wavelengths)
+        return vacuum_wavelengths
+
+
+import numpy as np
+
+
+def airtovac(wave_air):
+    """Taken from idl astrolib
+    ;+
+    ; NAME:
+    ;       AIRTOVAC
+    ; PURPOSE:
+    ;       Convert air wavelengths to vacuum wavelengths
+    ; EXPLANATION:
+    ;       Wavelengths are corrected for the index of refraction of air under
+    ;       standard conditions.  Wavelength values below 2000 A will not be
+    ;       altered.  Uses relation of Ciddor (1996).
+    ;
+    ; CALLING SEQUENCE:
+    ;       AIRTOVAC, WAVE_AIR, [ WAVE_VAC]
+    ;
+    ; INPUT/OUTPUT:
+    ;       WAVE_AIR - Wavelength in Angstroms, scalar or vector
+    ;               If this is the only parameter supplied, it will be updated on
+    ;               output to contain double precision vacuum wavelength(s).
+    ; OPTIONAL OUTPUT:
+    ;        WAVE_VAC - Vacuum wavelength in Angstroms, same number of elements as
+    ;                 WAVE_AIR, double precision
+    ;
+    ; EXAMPLE:
+    ;       If the air wavelength is  W = 6056.125 (a Krypton line), then
+    ;       AIRTOVAC, W yields an vacuum wavelength of W = 6057.8019
+    ;
+    ; METHOD:
+    ;	Formula from Ciddor 1996, Applied Optics 62, 958
+    ;
+    ; NOTES:
+    ;       Take care within 1 A of 2000 A.   Wavelengths below 2000 A *in air* are
+    ;       not altered.
+    ; REVISION HISTORY
+    ;       Written W. Landsman                November 1991
+    ;       Use Ciddor (1996) formula for better accuracy in the infrared
+    ;           Added optional output vector, W Landsman Mar 2011
+    ;       Iterate for better precision W.L./D. Schlegel  Mar 2011
+    ;-
+    """
+    wave_vac = wave_air * 1.0
+    g = wave_vac > 2000  # Only modify above 2000 A
+
+    if np.sum(g):
+        for iter in [0, 1]:
+            if isinstance(g, np.ndarray):
+                sigma2 = (1e4 / wave_vac[g]) ** 2.0  # Convert to wavenumber squared
+                # Compute conversion factor
+                fact = 1.0 + 5.792105e-2 / (238.0185 - sigma2) + 1.67917e-3 / (57.362 - sigma2)
+                wave_vac[g] = wave_air[g] * fact  # Convert Wavelength
+            else:  # scalar version
+                sigma2 = (1e4 / wave_vac) ** 2.0  # Convert to wavenumber squared
+                # Compute conversion factor
+                fact = 1.0 + 5.792105e-2 / (238.0185 - sigma2) + 1.67917e-3 / (57.362 - sigma2)
+                wave_vac = wave_air * fact  # Convert Wavelength
+
+    return wave_vac
+

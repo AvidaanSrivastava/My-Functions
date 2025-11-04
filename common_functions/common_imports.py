@@ -7,6 +7,7 @@ from astropy.time import Time
 from astropy.timeseries import LombScargle
 from astropy import constants as const
 from astropy import units as u
+import astroquery
 
 # ========================
 # Plotting

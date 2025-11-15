@@ -166,7 +166,7 @@ def planck_func(wave, T):
     k = 1.38e-23
     nu = c / wave
 
-    return 2 * h * nu**3 / c**2 / (np.exp(h * nu / k / T) - 1)
+    return 2 * h * c**2 / wave**5 / (np.exp(h * c / wave / k / T) - 1)
 
 
 def ESM(T_day, T_star, R_planet, R_star, k_mag):

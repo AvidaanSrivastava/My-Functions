@@ -182,8 +182,8 @@ def ESM(T_day, T_star, R_planet, R_star, k_mag):
     esm: Emission Spectroscopic Metric in solar masses
     """
 
-    B_day = planck_func(15*10**(-6), T_day)
-    B_star = planck_func(15*10**(-6), T_star)
+    B_day = planck_func(7.5*10**(-6), T_day)
+    B_star = planck_func(7.5*10**(-6), T_star)
 
     esm = 4.29*10**6 * (R_planet * 6.278e6/(R_star*6.96e8))**2 * 10**(-1/5*k_mag) * B_day / B_star
     

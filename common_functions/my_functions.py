@@ -64,7 +64,8 @@ def calc_Teq(T_star, a, R_star, T_star_err=None, a_err=None, R_star_err=None, A=
     R_star = 6.96e8 * R_star    ## in meters
 
     x = R_star / (2 * a)
-    Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4) * 2 ** .5
+    # Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * (q)**(1/4) * 2 ** .5
+    Tday = T_star * (1 - A)**(1/4) * (x)**(1/2) * 1.1
     Teq = T_star * (1 - A)**(1/4) * (x)**(1/2)
 
     if T_star_err is None and R_star_err is None and a_err is None:

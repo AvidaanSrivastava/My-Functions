@@ -73,17 +73,17 @@ from george.gp import LinAlgError
 from PyAstronomy.pyasl import foldAt
 # import superearth as se
 import exopie
-import spright 
-from spright import RMRelation
-from ldtk import LDPSetCreator, BoxcarFilter
-from ldtk.filters import tess
+# import spright 
+# from spright import RMRelation
+# from ldtk import LDPSetCreator, BoxcarFilter
+# from ldtk.filters import tess
 
 # ========================
 # PandEXO
 # ========================
 import warnings
 warnings.filterwarnings('ignore')
-import pandexo.engine.justdoit as jdi # THIS IS THE HOLY GRAIL OF PANDEXO
+# import pandexo.engine.justdoit as jdi # THIS IS THE HOLY GRAIL OF PANDEXO
 
 # ========================
 # Progress bar

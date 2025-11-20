@@ -71,7 +71,7 @@ import george
 from george import kernels
 from george.gp import LinAlgError
 from PyAstronomy.pyasl import foldAt
-import superearth as se
+# import superearth as se
 import exopie
 import spright 
 from spright import RMRelation

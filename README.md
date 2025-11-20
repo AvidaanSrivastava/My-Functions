@@ -2,6 +2,8 @@
 
 Install using: pip install --upgrade --force-reinstall git+https://github.com/AvidaanSrivastava/My-Functions.git
 
+On ALLIANCE install using: pip install --upgrade --force-reinstall git+https://github.com/AvidaanSrivastava/My-Functions.git@alliance --no-index
+
 Repository containing a python script which contains all useful python functions I've created. The following functions are in the script (more to be added as needed):
 
 1. p_to_a: Get semi-major axis (a) from orbital period (P) and mass of the star (M_star)

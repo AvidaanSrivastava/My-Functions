@@ -4,6 +4,7 @@
 
 import numpy as np
 from astropy.io import fits
+import radvel
 
 def p_to_a(period, M_star, period_err=None, M_star_err=None):
     """

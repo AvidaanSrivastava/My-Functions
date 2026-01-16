@@ -37,7 +37,7 @@ import glob
 import string
 import pprint
 from copy import deepcopy
-sys.path.append('/Users/avidaansrivastava/Documents/NIRPS/USP\ plots/M-R_models/forecaster/')
+sys.path.append('/Users/avidaansrivastava/Documents/NIRPS/USP plots/M-R_models/forecaster/')
 
 # ========================
 # Scipy tools

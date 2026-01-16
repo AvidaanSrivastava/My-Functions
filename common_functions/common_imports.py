@@ -77,6 +77,7 @@ import spright
 from spright import RMRelation
 from ldtk import LDPSetCreator, BoxcarFilter
 from ldtk.filters import tess
+import mr_forecast as mr
 
 # ========================
 # PandEXO

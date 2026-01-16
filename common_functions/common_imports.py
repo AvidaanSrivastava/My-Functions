@@ -90,6 +90,16 @@ import pandexo.engine.justdoit as jdi # THIS IS THE HOLY GRAIL OF PANDEXO
 # ========================
 from tqdm import tqdm
 
+
+# ========================
+# Google sheets
+# ========================
+import gspread
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+
+
 # ========================
 # Collections
 # ========================

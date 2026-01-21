@@ -814,3 +814,10 @@ def airtovac(wave_air):
 
     return wave_vac
 
+
+def read_public_google_sheet(sheet_url):
+    """Read a public Google Sheet directly"""
+    sheet_id = sheet_url.split('/d/')[1].split('/')[0]
+    csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+    df = pd.read_csv(csv_url)
+    return df

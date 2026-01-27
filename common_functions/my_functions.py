@@ -821,3 +821,25 @@ def read_public_google_sheet(sheet_url):
     csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
     df = pd.read_csv(csv_url)
     return df
+
+
+def save_to_rdb(filename, bjd, vrad, svrad):
+    """
+    Save data to an RDB (tab-separated, header with #) file. Compatible with DACE.
+
+    Parameters
+    ----------
+    filename : str
+        Output file path.
+    bjd : array-like
+        Barycentric Julian Dates.
+    vrad : array-like
+        Radial velocities.
+    svrad : array-like
+        Radial velocity uncertainties.
+    """
+    header = "rjd\tvrad\tsvrad\n"
+    with open(filename, 'w') as f:
+        f.write(header)
+        for j, v, s in zip(bjd, vrad, svrad):
+            f.write(f"{j:.6f}\t{v:.4f}\t{s:.4f}\n")

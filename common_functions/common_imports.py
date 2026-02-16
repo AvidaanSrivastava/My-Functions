@@ -42,6 +42,7 @@ sys.path.append('/Users/avidaansrivastava/Documents/NIRPS/USP plots/M-R_models/f
 # ========================
 # Scipy tools
 # ========================
+import scipy 
 from scipy import interpolate, optimize
 from scipy.linalg import solve, solve_banded
 from scipy.optimize import curve_fit, least_squares, leastsq, minimize

@@ -865,3 +865,24 @@ def Vmag_to_Hmag (Vmag, teff):
     Hmag = Vmag - v_h_closest
 
     return Hmag
+
+
+def SPIRou_sigma_RV_calc (H_mag, sp_type):
+    """
+    Calculate SPIRou sigma_RV based on H magnitude and spectral type.
+    sp_type: 'early' or 'late'
+
+    Texp = 900s
+    """
+    if sp_type == 'early':
+        
+        sig_rv = 0.78 * 10 ** (1.03 * (H_mag - 5) / 5) / 2
+
+    elif sp_type == 'late':
+        
+        sig_rv = 0.45 * 10 ** (1.10 * (H_mag - 5) / 5) / 2
+
+    else:
+        raise ValueError("sp_type must be 'early' or 'late'")
+
+    return sig_rv

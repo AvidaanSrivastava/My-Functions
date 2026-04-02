@@ -843,3 +843,25 @@ def save_to_rdb(filename, bjd, vrad, svrad):
         f.write(header)
         for j, v, s in zip(bjd, vrad, svrad):
             f.write(f"{j:.6f}\t{v:.4f}\t{s:.4f}\n")
+
+
+def Vmag_to_Hmag (Vmag, teff):
+
+    '''
+    Convert V magnitude to H magnitude based on effective temperature. 
+    From relations in Pecaut & Mamajek (2013).
+    '''
+
+    sp_types = ['M0V', 'M1V', 'M2V', 'M3V', 'M4V', 'M5V', 'M6V', 'M7V', 'M8V', 'M9V']
+    teff_values = [3850, 3680, 3550, 3400, 3200, 3050, 2800, 2650, 2570, 2450]
+
+    teff_closest = min(teff_values, key=lambda x: abs(x - teff))
+    sp_type_closest = sp_types[teff_values.index(teff_closest)]
+
+    v_h = [3.587, 3.873, 4.006, 4.348, 4.968, 5.631, 6.948, 7.667, 8.268, 8.366]
+
+    v_h_closest = v_h[teff_values.index(teff_closest)]
+
+    Hmag = Vmag - v_h_closest
+
+    return Hmag

@@ -842,7 +842,7 @@ def save_to_rdb(filename, bjd, vrad, svrad):
     with open(filename, 'w') as f:
         f.write(header)
         for j, v, s in zip(bjd, vrad, svrad):
-            f.write(f"{j:.6f}\t{v:.4f}\t{s:.4f}\n")
+            f.write(f"{j:.10f}\t{v:.10f}\t{s:.10f}\n")
 
 
 def Vmag_to_Hmag (Vmag, teff):

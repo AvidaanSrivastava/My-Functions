@@ -707,8 +707,18 @@ def TSM(Rp, Teq, Mp, Rs, jmag):
     jmag: Stellar J magnitude
     
     '''
+    if Rp < 1.5:
+        s = 0.19
+    elif (Rp >= 1.5) & (Rp < 2.75):
+        s = 1.26
+    elif (Rp >= 2.75) & (Rp <= 4):
+        s = 1.28
+    elif Rp > 4:
+        s = 1.15
+    else:
+        "Radius > 10 Re!!"
 
-    tsm = 0.19 * (Rp**3 * Teq) / (Mp * Rs**2) * 10**(-1/5*jmag) 
+    tsm = s * (Rp**3 * Teq) / (Mp * Rs**2) * 10**(-1/5*jmag) 
     return tsm
 
 

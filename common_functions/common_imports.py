@@ -48,7 +48,7 @@ from scipy.linalg import solve, solve_banded
 from scipy.optimize import curve_fit, least_squares, leastsq, minimize
 from scipy.special import erf
 from scipy.stats import median_abs_deviation as mad, norm
-from scipy.signal import argrelextrema
+
 
 # ========================
 # Modeling & fitting
